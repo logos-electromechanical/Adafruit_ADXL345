@@ -253,3 +253,424 @@ void Adafruit_ADXL345::getSensor(sensor_t *sensor) {
   sensor->min_value   = 1100.0F;
   sensor->resolution  = 0.01F;                // 0.01 hPa resolution
 }
+
+/**************************************************************************/
+/*! 
+    @brief  Set the threshold for tap detection, in gees
+*/
+/**************************************************************************/
+
+void Adafruit_ADXL345::setTapThreshold(float acceleration) {
+  if (acceleration > 16) acceleration = 16;
+  if (acceleration < 0) acceleration = 0;
+  writeRegister(ADXL345_REG_THRESH_TAP, (uint8_t)(int(acceleration*16)));
+  return;
+}
+
+/**************************************************************************/
+/*! 
+    @brief  Get the threshold for tap detection, in gees
+*/
+/**************************************************************************/
+
+float Adafruit_ADXL345::getTapThreshold(void) {
+  return (float(readRegister(ADXL345_REG_THRESH_TAP)) * 0.0625);
+}
+
+/**************************************************************************/
+/*! 
+    @brief  Set the maximum duration for a tap, in milliseconds
+*/
+/**************************************************************************/
+
+void Adafruit_ADXL345::setTapDuration(float milli) {
+  if (milli > 159.375) milli = 159.375;
+  if (milli < 0) milli = 0;
+  writeRegister(ADXL345_REG_DUR, (uint8_t)(int(milli*1.6)));
+  return;
+}
+
+/**************************************************************************/
+/*! 
+    @brief  Get the maximum duration for a tap, in milliseconds
+*/
+/**************************************************************************/
+
+float Adafruit_ADXL345::getTapDuration(void) {
+  return(float(readRegister(ADXL345_REG_DUR)) * 0.625);
+}
+
+/**************************************************************************/
+/*! 
+    @brief  Set the latency between the end of one tap and the window for a possible second tap, in milliseconds
+*/
+/**************************************************************************/
+
+void Adafruit_ADXL345::setTapLatentcy(int milli) {
+  if (milli > 318.75) milli = 318.75;
+  if (milli < 0) milli = 0;
+  writeRegister(ADXL345_REG_LATENT, (uint8_t)(int(milli*0.8)));
+  return;
+}
+
+/**************************************************************************/
+/*! 
+    @brief  Get the latency between the end of one tap and the window for a possible second tap, in milliseconds
+*/
+/**************************************************************************/
+
+int Adafruit_ADXL345::getTapLatentcy(void) {
+  return(int(readRegister(ADXL345_REG_LATENT) * 1.25));
+}
+
+/**************************************************************************/
+/*! 
+    @brief  Set the detection window for a possible second tap, in milliseconds
+*/
+/**************************************************************************/
+
+void Adafruit_ADXL345::setTapWindow(int milli) {
+  if (milli > 318.75) milli = 318.75;
+  if (milli < 0) milli = 0;
+  writeRegister(ADXL345_REG_WINDOW, (uint8_t)(int(milli*0.8)));
+  return;
+}
+
+/**************************************************************************/
+/*! 
+    @brief  Get the detection window for a possible second tap, in milliseconds
+*/
+/**************************************************************************/
+
+int Adafruit_ADXL345::setTapWindow(void) {
+  return(int(readRegister(ADXL345_REG_WINDOW) * 1.25));
+}
+
+/**************************************************************************/
+/*! 
+    @brief  Set the minimum acceleration that trips an activity interrupt, in gees
+*/
+/**************************************************************************/
+
+void Adafruit_ADXL345::setActivityThreshold(float acceleration) {
+  if (acceleration > 16) acceleration = 16;
+  if (acceleration < 0) acceleration = 0;
+  writeRegister(ADXL345_REG_THRESH_ACT, (uint8_t)(int(acceleration*16)));
+  return;
+}
+
+/**************************************************************************/
+/*! 
+    @brief  Get the minimum acceleration that trips an activity interrupt, in gees
+*/
+/**************************************************************************/
+
+float Adafruit_ADXL345::getActivityThreshold(void) {
+  return(float(readRegister(ADXL345_REG_THRESH_ACT)) * 0.0625);
+}
+
+/**************************************************************************/
+/*! 
+    @brief  Set the maximum acceleration that trips an inactivity interrupt, in gees
+*/
+/**************************************************************************/
+
+void Adafruit_ADXL345::setInactivityThreshold(float acceleration) {
+  if (acceleration > 16) acceleration = 16;
+  if (acceleration < 0) acceleration = 0;
+  writeRegister(ADXL345_REG_THRESH_INACT, (uint8_t)(int(acceleration*16)));
+  return;
+}
+
+/**************************************************************************/
+/*! 
+    @brief  Get the maximum acceleration that trips an inactivity interrupt, in gees
+*/
+/**************************************************************************/
+
+float Adafruit_ADXL345::getInactivityThreshold(void) {
+  return(float(readRegister(ADXL345_REG_THRESH_INACT)) * 0.0625);
+}
+
+/**************************************************************************/
+/*! 
+    @brief  Set the time delay required to trip an inactivity interrupt in seconds
+*/
+/**************************************************************************/
+
+void Adafruit_ADXL345::setInactivityTime(uint8_t inActTime) {
+  writeRegister(ADXL345_REG_TIME_INACT, inActSettings);
+  return;
+}
+
+/**************************************************************************/
+/*! 
+    @brief  Get the time delay required to trip an inactivity interrupt in seconds
+*/
+/**************************************************************************/
+
+uint8_t Adafruit_ADXL345::getInactivityTime(void) {
+  return(readRegister(ADXL345_REG_TIME_INACT));
+}
+
+/**************************************************************************/
+/*! 
+    @brief  Set the control bits for activity/inactivity interrupts
+*/
+/**************************************************************************/
+
+void Adafruit_ADXL345::setInactivityControl(uint8_t inActSettings) {
+  writeRegister(ADXL345_REG_ACT_INACT_CTL, inActSettings);
+  return;
+}
+
+/**************************************************************************/
+/*! 
+    @brief  Get the control bits for activity/inactivity interrupts
+*/
+/**************************************************************************/
+
+uint8_t Adafruit_ADXL345::getInactivityControl(void) {
+  return(readRegister(ADXL345_REG_ACT_INACT_CTL));
+}
+
+/**************************************************************************/
+/*! 
+    @brief  Set the maximum acceleration that trips a free-fall interrupt, in gees
+*/
+/**************************************************************************/
+
+void Adafruit_ADXL345::setFreefallThreshold(float acceleration) {
+  if (acceleration > 16) acceleration = 16;
+  if (acceleration < 0) acceleration = 0;
+  writeRegister(ADXL345_REG_THRESH_FF, (uint8_t)(int(acceleration*16)));
+  return;  
+}
+
+/**************************************************************************/
+/*! 
+    @brief  Get the maximum acceleration that trips a free-fall interrupt, in gees
+*/
+/**************************************************************************/
+
+float Adafruit_ADXL345::getFreefallThreshold(void) {
+  return(float(readRegister(ADXL345_REG_THRESH_FF)) * 0.0625);
+}
+
+/**************************************************************************/
+/*! 
+    @brief  Set the minimum free fall time to trip an interrupt, in milliseconds
+*/
+/**************************************************************************/
+
+void Adafruit_ADXL345::setFreefallTime(int milli) {
+  if (milli > 1275) milli = 1275;
+  if (milli < 0) milli = 0;
+  writeRegister(ADXL345_REG_TIME_FF, (uint8_t)(int(milli/5)));
+  return;
+}
+
+/**************************************************************************/
+/*! 
+    @brief  Get the minimum free fall time to trip an interrupt, in milliseconds
+*/
+/**************************************************************************/
+
+int Adafruit_ADXL345::getFreefallTime(void) {
+  return(readRegister(ADXL345_REG_TIME_FF) * 5);
+}
+
+/**************************************************************************/
+/*! 
+    @brief  Set the axes that taps are detected on
+*/
+/**************************************************************************/
+
+void Adafruit_ADXL345::setTapAxes(uint8_t tapAxes) {
+  writeRegister(ADXL345_REG_TAP_AXES, tapAxes);
+  return;
+}
+
+/**************************************************************************/
+/*! 
+    @brief  Get the axes that taps are detected on
+*/
+/**************************************************************************/
+
+void Adafruit_ADXL345::getTapAxes(uint8_t tapAxes) {
+  return(readRegister(ADXL345_REG_TAP_AXES));
+}
+
+/**************************************************************************/
+/*! 
+    @brief  Set power control register
+*/
+/**************************************************************************/
+
+void Adafruit_ADXL345::setPwrCtl(uint8_t pwrCtl) {
+  writeRegister(ADXL345_REG_POWER_CTL, pwrCtl);
+  return;
+}
+
+/**************************************************************************/
+/*! 
+    @brief  Get power control register
+*/
+/**************************************************************************/
+
+void Adafruit_ADXL345::getPwrCtl(uint8_t pwrCtl) {
+  return(readRegister(ADXL345_REG_POWER_CTL));
+}
+
+/**************************************************************************/
+/*! 
+    @brief  Set interrupt enable register
+*/
+/**************************************************************************/
+
+void Adafruit_ADXL345::setIntEnable(uint8_t intEnable) {
+  writeRegister(ADXL345_REG_INT_ENABLE, intEnable);
+  return;
+}
+
+/**************************************************************************/
+/*! 
+    @brief  Get interrupt enable register
+*/
+/**************************************************************************/
+
+void Adafruit_ADXL345::getIntEnable(uint8_t intEnable) {
+  return(readRegister(ADXL345_REG_INT_ENABLE));
+}
+
+/**************************************************************************/
+/*! 
+    @brief  Set interrupt map register
+*/
+/**************************************************************************/
+
+void Adafruit_ADXL345::setIntMap(uint8_t intMap) {
+  writeRegister(ADXL345_REG_INT_MAP, intMap);
+  return;
+}
+
+/**************************************************************************/
+/*! 
+    @brief  Get interrupt map register
+*/
+/**************************************************************************/
+
+void Adafruit_ADXL345::getIntMap(uint8_t intMap) {
+  return(readRegister(ADXL345_REG_INT_MAP));
+}
+
+/**************************************************************************/
+/*! 
+    @brief  Set data format register
+*/
+/**************************************************************************/
+
+void Adafruit_ADXL345::setDataFormat(uint8_t dataFormat) {
+  writeRegister(ADXL345_REG_DATA_FORMAT, dataFormat);
+  return;
+}
+
+/**************************************************************************/
+/*! 
+    @brief  Get data format register
+*/
+/**************************************************************************/
+
+void Adafruit_ADXL345::getDataFormat(uint8_t dataFormat) {
+  return(readRegister(ADXL345_REG_DATA_FORMAT));
+}
+
+/**************************************************************************/
+/*! 
+    @brief  Set FIFO configuration register
+*/
+/**************************************************************************/
+
+void Adafruit_ADXL345::setFIFOctl(uint8_t FIFOctl) {
+  writeRegister(ADXL345_REG_FIFO_CTL, FIFOctl);
+  return;
+}
+
+/**************************************************************************/
+/*! 
+    @brief  Get FIFO configuration register
+*/
+/**************************************************************************/
+
+void Adafruit_ADXL345::getFIFOctl(uint8_t FIFOctl) {
+  return(readRegister(ADXL345_REG_FIFO_CTL));
+}
+
+/**************************************************************************/
+/*! 
+    @brief  Get tap & activity source register
+*/
+/**************************************************************************/
+
+uint8_t Adafruit_ADXL345::getTapActAxes(void) {
+  return(readRegister(ADXL345_REG_ACT_TAP_STATUS));
+}
+
+/**************************************************************************/
+/*! 
+    @brief  Get interrupt source register
+*/
+/**************************************************************************/
+
+uint8_t Adafruit_ADXL345::getInterruptSource(void) {
+  return(readRegister(ADXL345_REG_INT_SOURCE));
+}
+
+/**************************************************************************/
+/*! 
+    @brief  Get FIFO status register
+*/
+/**************************************************************************/
+
+uint8_t Adafruit_ADXL345::getFIFOstatus(void) {
+  return(readRegister(ADXL345_REG_FIFO_STATUS));
+}
+
+/**************************************************************************/
+/*! 
+    @brief  Dump raw value of all registers to Serial
+*/
+/**************************************************************************/
+
+void    Adafruit_ADXL345::dumpRegistersRaw(void) {
+    Serial.print("Device ID\t0x"); Serial.println(readRegister(ADXL345_REG_DEVID), HEX);
+    Serial.print("Tap Threshold\t0x"); Serial.println(readRegister(ADXL345_REG_THRESH_TAP), HEX);
+    Serial.print("X offset\t0x"); Serial.println(readRegister(ADXL345_REG_OFSX), HEX);
+    Serial.print("Y offset\t0x"); Serial.println(readRegister(ADXL345_REG_OFSY), HEX);
+    Serial.print("Z offset\t0x"); Serial.println(readRegister(ADXL345_REG_OFSZ), HEX);
+    Serial.print("Tap Duration\t0x"); Serial.println(readRegister(ADXL345_REG_DUR), HEX);
+    Serial.print("Tap Latency\t0x"); Serial.println(readRegister(ADXL345_REG_LATENT), HEX);
+    Serial.print("Tap Window\t0x"); Serial.println(readRegister(ADXL345_REG_WINDOW), HEX);
+    Serial.print("Activity Threshold\t0x"); Serial.println(readRegister(ADXL345_REG_THRESH_ACT), HEX);
+    Serial.print("Inactivity Threshold\t0x"); Serial.println(readRegister(ADXL345_REG_THRESH_INACT), HEX);
+    Serial.print("Inactivity Timeout\t0x"); Serial.println(readRegister(ADXL345_REG_TIME_INACT), HEX);
+    Serial.print("Activity/Inactivity Ctl\t0x"); Serial.println(readRegister(ADXL345_REG_ACT_INACT_CTL), HEX);
+    Serial.print("Freefall Threshold\t0x"); Serial.println(readRegister(ADXL345_REG_THRESH_FF), HEX);
+    Serial.print("Freefall Time\t0x"); Serial.println(readRegister(ADXL345_REG_TIME_FF), HEX);
+    Serial.print("Tap Axis Control\t0x"); Serial.println(readRegister(ADXL345_REG_TAP_AXES), HEX);
+    Serial.print("Activity/Tap Status\t0x"); Serial.println(readRegister(ADXL345_REG_ACT_TAP_STATUS), HEX);
+    Serial.print("Data Rate\t0x"); Serial.println(readRegister(ADXL345_REG_BW_RATE), HEX);
+    Serial.print("Power Control\t0x"); Serial.println(readRegister(ADXL345_REG_POWER_CTL), HEX);
+    Serial.print("Interrupt Enable\t0x"); Serial.println(readRegister(ADXL345_REG_INT_ENABLE), HEX);
+    Serial.print("Interrupt Map\t0x"); Serial.println(readRegister(ADXL345_REG_INT_MAP), HEX);
+    Serial.print("Interrupt Source\t0x"); Serial.println(readRegister(ADXL345_REG_INT_SOURCE), HEX);
+    Serial.print("Data Format\t0x"); Serial.println(readRegister(ADXL345_REG_DATA_FORMAT), HEX);
+    Serial.print("X0 Data\t0x"); Serial.println(readRegister(ADXL345_REG_DATAX0), HEX);
+    Serial.print("X1 Data\t0x"); Serial.println(readRegister(ADXL345_REG_DATAX1), HEX);
+    Serial.print("Y0 Data\t0x"); Serial.println(readRegister(ADXL345_REG_DATAY0), HEX);
+    Serial.print("Y1 Data\t0x"); Serial.println(readRegister(ADXL345_REG_DATAY1), HEX);
+    Serial.print("Z0 Data\t0x"); Serial.println(readRegister(ADXL345_REG_DATAZ0), HEX);
+    Serial.print("Z1 Data\t0x"); Serial.println(readRegister(ADXL345_REG_DATAZ1), HEX);
+    Serial.print("FIFO Control\t0x"); Serial.println(readRegister(ADXL345_REG_FIFO_CTL), HEX);
+    Serial.print("FIFO Status\t0x"); Serial.println(readRegister(ADXL345_REG_FIFO_STATUS), HEX);
+}
